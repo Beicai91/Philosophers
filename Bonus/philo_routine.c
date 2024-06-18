@@ -37,9 +37,6 @@ static void    *monitor_death(void *data)
         {
             print_message("died", p);
             sem_post(p->simulation->endsimul);
-            //test
-            printf("sem post done, signal sent\n");
-            //
             return (NULL);
         }
         sem_post(p->simulation->death_check);

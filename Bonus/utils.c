@@ -42,29 +42,16 @@ void    destroy_all(t_simulation *simulation)
     while (i < simulation->philo_nbr)
     {
         if (simulation->philos[i].pid != -1)
-        {
             kill(simulation->philos[i].pid, SIGKILL);
-            //test
-            printf("killed one process\n");
-            //
-        }
         i++;
     }
     if (simulation->philos)
         free(simulation->philos);
-    //test
-    printf("freed philos\n");
-    //
-    //sem_close(simulation->endsimul);
-    //sem_close(simulation->death_check);
-    //sem_close(simulation->full);
-    //sem_close(simulation->forks);
-    //test
-    printf("closed semaphores\n");
-    //
+    sem_close(simulation->death_check);
+    sem_close(simulation->forks);
+    sem_close(simulation->endsimul);
     sem_unlink("endsimul");
     sem_unlink("death_check");
-    sem_unlink("full");
     sem_unlink("forks");
 }
 

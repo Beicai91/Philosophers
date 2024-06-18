@@ -17,7 +17,6 @@ static void    create_philo_process(t_simulation *simulation)
             exit(0);
         }
         i++;
-        //precise_usleep(100);
     }
 }
 
@@ -35,6 +34,8 @@ static void    *monitor_full(void *data)
         if (simulation->philos_full == simulation->philo_nbr)
         {
             sem_post(simulation->endsimul);
+            sem_close(simulation->full);
+            sem_unlink("full");
             return (NULL);
         }
     }
@@ -47,14 +48,7 @@ void    start_simulation(t_simulation *simulation)
     safe_thread(&monitor, monitor_full, (void *)&(simulation->philos[0]), CREATE);
     safe_thread(&monitor, NULL, simulation, DETACH);
     simulation->start_time = get_current_time() * 1e3;
-    //sem_wait(simulation->endsimul);
     create_philo_process(simulation);
     sem_wait(simulation->endsimul);
-    //test
-    printf("signal received, ready to shut all down\n");
-    //
     destroy_all(simulation);
-    //test
-    printf("detroyed all\n");
-    //
 }
