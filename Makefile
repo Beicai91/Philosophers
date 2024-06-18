@@ -2,7 +2,7 @@ NAME = philo
 CC = gcc 
 CFLAGS = -Wextra -Wall -Werror -fsanitize=address -g -MMD -MP
 H_PATH = -I.
-LDLIB = -lpthread
+PTHREAD_FLAG = -pthread
 DODIR = dofile
 SRCS = check_args.c \
 	   data_init.c \
@@ -26,7 +26,7 @@ all: $(NAME)
 
 #Rule to link the program
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LDLIB) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(PTHREAD_FLAG) $(OBJS) -o $(NAME)
 
 #Rule to compile source file into object files, dependancy files are generated as well during the compilation phase
 #| $(DODIR): Order-only prerequisite, ensures that the $(DODIR) directory exists before attempting to create object files.
@@ -34,7 +34,7 @@ $(NAME): $(OBJS)
 # if we are sure that all o files will be in DODIR without any subdirectories, we can also use `@mkdir -p $(DODIR)`
 $(OBJS): $(DODIR)/%.o: %.c | $(DODIR)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLGAS) $(H_PATH) -c $< -o $@ -MF $(DODIR)/$*.d
+	$(CC) $(CFLGAS) $(H_PATH) $(PTHREAD_FLAG) -c $< -o $@ -MF $(DODIR)/$*.d
 
 #Rule to create the DODIR. -p makes sure that if it exists already, nothing will be done
 $(DODIR):
