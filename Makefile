@@ -1,6 +1,6 @@
 NAME = philo
 CC = gcc 
-CFLAGS = -Wextra -Wall -Werror -fsanitize=address -g -MMD -MP
+CFLAGS = -Wextra -Wall -Werror -g3
 H_PATH = -I.
 PTHREAD_FLAG = -pthread
 DODIR = dofile
@@ -15,14 +15,15 @@ SRCS = check_args.c \
 
 #DEFINE object files
 OBJS = $(patsubst %.c,$(DODIR)/%.o,$(SRCS))
+
 #DEFINE dependancy files
-DEP = $(patsubst %.o,%.d,$(OBJS))
+#DEP = $(patsubst %.o,%.d,$(OBJS))
 
 #Default target
 all: $(NAME)
 
 #include dependancy files: SHOULD BE PLACED AFTER DEFAULT TARGET
--include $(DEP)
+#-include $(DEP)
 
 #Rule to link the program
 $(NAME): $(OBJS)
@@ -34,7 +35,7 @@ $(NAME): $(OBJS)
 # if we are sure that all o files will be in DODIR without any subdirectories, we can also use `@mkdir -p $(DODIR)`
 $(OBJS): $(DODIR)/%.o: %.c | $(DODIR)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLGAS) $(H_PATH) $(PTHREAD_FLAG) -c $< -o $@ -MF $(DODIR)/$*.d
+	$(CC) $(CFLGAS) $(H_PATH) $(PTHREAD_FLAG) -c $< -o $@ 
 
 #Rule to create the DODIR. -p makes sure that if it exists already, nothing will be done
 $(DODIR):

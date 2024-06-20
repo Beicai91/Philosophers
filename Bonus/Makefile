@@ -1,6 +1,6 @@
 NAME = philo_bonus
 CC = gcc
-CFLAGS = -Wextra -Werror -Wall -MMD -MP
+CFLAGS = -Wextra -Werror -Wall
 H_PATH = -I.
 PTHREAD_FLAG = -pthread
 DODIR = dofile
@@ -13,7 +13,6 @@ SRCS = main.c \
 	   utils.c
 
 OBJS = $(patsubst %.c,$(DODIR)/%.o,$(SRCS))
-DEP = $(patsubst %.o,%.d,$(OBJS))
 
 #Default target
 all: $(NAME)
@@ -25,7 +24,7 @@ $(NAME): $(OBJS)
 #Rule to compile and generate d files
 $(OBJS):$(DODIR)/%.o:%.c | $(DODIR)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(H_PATH) $(PTHREAD_FLAG) -c $< -o $@ -MF $(DODIR)/$*.d
+	$(CC) $(CFLAGS) $(H_PATH) $(PTHREAD_FLAG) -c $< -o $@
 
 $(DODIR):
 	mkdir -p $@

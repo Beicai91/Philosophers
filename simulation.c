@@ -1,45 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   simulation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bcai <bcai@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/20 11:39:22 by bcai              #+#    #+#             */
+/*   Updated: 2024/06/20 12:10:49 by bcai             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static void    create_philo_threads(t_simulation *simulation)
+static void	create_philo_threads(t_simulation *simulation)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (++i < simulation->philo_nbr)
-        safe_thread(&(simulation->philos[i].thread), philo_routine, &(simulation->philos[i]), CREATE);
+	i = -1;
+	while (++i < simulation->philo_nbr)
+		safe_thread(&(simulation->philos[i].thread), philo_routine,
+			&(simulation->philos[i]), CREATE);
 }
 
-static void    join_philo_threads(t_simulation *simulation)
+static void	join_philo_threads(t_simulation *simulation)
 {
-    int i;
-    t_philo *philos;
+	int		i;
+	t_philo	*philos;
 
-    i = -1;
-    philos = simulation->philos;
-    while (++i < simulation->philo_nbr)
-        safe_thread(&(philos[i].thread), NULL, NULL, JOIN);
+	i = -1;
+	philos = simulation->philos;
+	while (++i < simulation->philo_nbr)
+		safe_thread(&(philos[i].thread), NULL, NULL, JOIN);
 }
 
-static void    destroy_mutex(t_simulation *simulation)
+static void	destroy_mutex(t_simulation *simulation)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (++i < simulation->philo_nbr)
-    safe_mutex(&(simulation->forks[i].fork), DESTROY, simulation);
-    safe_mutex(&(simulation->endsimul_lock), DESTROY, simulation);
-    safe_mutex(&(simulation->mealnum_lock), DESTROY, simulation);
-    safe_mutex(&(simulation->mealtime_lock), DESTROY, simulation);
+	i = -1;
+	while (++i < simulation->philo_nbr)
+		safe_mutex(&(simulation->forks[i].fork), DESTROY, simulation);
+	safe_mutex(&(simulation->endsimul_lock), DESTROY, simulation);
+	safe_mutex(&(simulation->mealnum_lock), DESTROY, simulation);
+	safe_mutex(&(simulation->mealtime_lock), DESTROY, simulation);
 }
 
-void    start_simulation(t_simulation *simulation)
+void	start_simulation(t_simulation *simulation)
 {
-    pthread_t   monitor;
+	pthread_t	monitor;
 
-    simulation->start_time = get_current_time() * 1000;
-    safe_thread(&monitor, monitor_routine, (void *)simulation, CREATE);
-    create_philo_threads(simulation);
-    safe_thread(&monitor, NULL, NULL, JOIN);
-    join_philo_threads(simulation);
-    destroy_mutex(simulation);
+	simulation->start_time = get_current_time() * 1000;
+	safe_thread(&monitor, monitor_routine, (void *)simulation, CREATE);
+	create_philo_threads(simulation);
+	safe_thread(&monitor, NULL, NULL, JOIN);
+	join_philo_threads(simulation);
+	destroy_mutex(simulation);
 }
