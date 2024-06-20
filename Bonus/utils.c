@@ -53,6 +53,7 @@ void    destroy_all(t_simulation *simulation)
     sem_unlink("endsimul");
     sem_unlink("death_check");
     sem_unlink("forks");
+    sem_unlink("full");
 }
 
 //pass parameter in microsecond
