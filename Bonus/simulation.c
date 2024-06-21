@@ -54,11 +54,11 @@ void	start_simulation(t_simulation *simulation)
 {
 	pthread_t	monitor;
 
+	simulation->start_time = get_current_time() * 1e3;
+	create_philo_process(simulation);
 	safe_thread(&monitor, monitor_full, (void *)&(simulation->philos[0]),
 		CREATE);
 	safe_thread(&monitor, NULL, simulation, DETACH);
-	simulation->start_time = get_current_time() * 1e3;
-	create_philo_process(simulation);
 	sem_wait(simulation->endsimul);
 	destroy_all(simulation);
 }

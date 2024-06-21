@@ -48,6 +48,7 @@ static void	*monitor_death(void *data)
 		if (get_current_time() * 1e3 - p->simulation->start_time
 			- p->meal_time > p->simulation->time_to_die)
 		{
+			sem_post(p->simulation->death_check);
 			print_message("died", p);
 			sem_post(p->simulation->endsimul);
 			return (NULL);
