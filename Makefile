@@ -1,6 +1,6 @@
 NAME = philo
 CC = gcc 
-CFLAGS = -Wextra -Wall -Werror -g3 -fsanitize=thread -g
+CFLAGS = -Wextra -Wall -Werror  #-fsanitize=thread -g
 H_PATH = -I.
 PTHREAD_FLAG = -pthread
 DODIR = dofile
