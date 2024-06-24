@@ -37,13 +37,14 @@ static void	nap_think(t_philo *philo)
 	print_message("is thinking", philo);
 }
 
+
 static void	*monitor_death(void *data)
 {
 	t_philo	*p;
 
 	p = (t_philo *)data;
 	while (1)
-	{
+	{	
 		sem_wait(p->simulation->death_check);
 		if (get_current_time() * 1e3 - p->simulation->start_time
 			- p->meal_time > p->simulation->time_to_die)
